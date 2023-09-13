@@ -5,15 +5,15 @@
   "main": "index.js",
   "types": "index.d.ts",
   "scripts": {
-    "install": "echo Using prebuilt binary, use `npm run build` to compile locally",
-    "prebuild": "node ./scripts/install_ffmpeg.js",
-    "build": "node-gyp rebuild",
+    "preinstall": "node ./scripts/install_ffmpeg.js",
+    "install": "node-gyp rebuild",
     "make-prebuilt": "node ./scripts/make_prebuilt.js",
     "test": "tape test/*.js",
     "lint": "eslint **/*.js",
     "lint-html": "eslint **/*.js -f html -o ./reports/lint-results.html",
     "lint-fix": "eslint --fix **/*.js"
   },
+  "gypfile": true,
   "repository": {
     "type": "git",
     "url": "git+https://github.com/WonderInventions/beamcoder.git"
@@ -43,17 +43,15 @@
     "eslint": "^8.9.0",
     "tape": "^5.5.2"
   },
-  "optionalDependencies": {
-    "@roamhq/beamcoder-win32-x64": "0.8.1",
-    "@roamhq/beamcoder-linux-x64": "0.8.0",
-    "@roamhq/beamcoder-darwin-arm64": "0.8.1",
-    "@roamhq/beamcoder-darwin-x64": "0.8.0"
-  },
   "files": [
     "index.js",
     "index.d.ts",
-    "bindings.js",
     "beamstreams.js",
+    "binding.gyp",
+    "bindings.js",
+    "scratch/",
+    "scripts/",
+    "src",
     "types/"
   ]
 }
