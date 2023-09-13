@@ -108,7 +108,7 @@ async function win32() {
     if (e.code === 'EEXIST') return;
     else throw e;
   });
-  
+
   // Check if ffmpeg binaries already downloaded
   const ffmpegFilename = 'ffmpeg-6.x-win64-shared';
   await access(`ffmpeg/${ffmpegFilename}`, fs.constants.R_OK).catch(async () => {
@@ -141,7 +141,12 @@ async function win32() {
 
 async function linux() {
   console.log('Checking FFmpeg dependencies for Beam Coder on Linux.');
-  const { stdout } = await execFile('ldconfig', ['-p']).catch(console.error);
+  let stdout;
+  try {
+    ({ stdout } = await execFile('ldconfig', ['-p']))
+  } catch {
+    ({ stdout } = await execFile('ls', ['/usr/lib']))
+  }
   let result = 0;
 
   if (stdout.indexOf('libavcodec.so.60') < 0) {
@@ -168,8 +173,8 @@ async function linux() {
     console.error('libpostproc.so.57 is not installed.');
     result = 1;
   }
-  if (stdout.indexOf('libswresample.so.4') < 0) {
-    console.error('libswresample.so.4 is not installed.');
+  if (stdout.indexOf('libswresample.so.5') < 0) {
+    console.error('libswresample.so.5 is not installed.');
     result = 1;
   }
   if (stdout.indexOf('libswscale.so.7') < 0) {
@@ -189,7 +194,7 @@ async function darwin() {
   console.log('Checking for FFmpeg dependencies via HomeBrew.');
   let output;
   let returnMessage;
-  
+
   try {
     output = await exec('brew list ffmpeg');
     returnMessage = 'FFmpeg already present via Homebrew.';
